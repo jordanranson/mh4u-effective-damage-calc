@@ -345,7 +345,7 @@ True average effective power is the average amount of damage your weapon does pe
             e.preventDefault();
 
             var weapon = $('#input_weapon option[selected]').text();
-            var total = calculateDamage(false)[0].toFixed(2);
+            var total = calculateDamage(false)[2].toFixed(2);
             var $row = $($compareRowTemplate.html());
 
             $row.find('.x-weapon').html(weapon);
