@@ -46,6 +46,12 @@
             box-shadow 100ms ease-in-out;
         }
 
+        button {
+            color: #fff;
+            background-color: #bf3e11;
+            cursor: pointer;
+        }
+
         input:focus,
         select:focus {
             box-shadow: 0 0 0 4px #bf3e11;
@@ -108,27 +114,27 @@
         }
 
         .output-section {
-
+            padding-bottom: 100px;
         }
 
 
-        .output-section h2, .output-section h4 {
+        h2, h4 {
             text-transform: uppercase;
             letter-spacing: 2px;
             padding-bottom: 1em;
         }
 
-        .output-section h1, .output-section h3 {
+        h1, h3 {
             color: #000;
         } 
 
-        .output-section h1 {
+        h1 {
             font-size: 150px;
             letter-spacing: -2px;
             font-weight: 300;
         }
 
-        .output-section h3 {
+        h3 {
             font-size: 54px;
             letter-spacing: -2px;
             font-weight: 300;
@@ -167,11 +173,48 @@
             top: 0;
             pointer-events: none;
         }
+
+        table {
+            width: 100%;
+            text-align: left;
+        }
+
+        th, td, .table-text {
+            line-height: 44px;
+            height: 44px;
+            font-size: 16px;
+            padding: 0 17px 0 0;
+        }
+
+        .table-text {
+            box-shadow: 0 0 0 0 transparent;
+            background: transparent;
+            width: 100%;
+            padding: 0 9px;
+        }
+
+        td {
+            box-shadow: 0 1px 0 #ccc inset;
+        }
+
+        th {
+            font-weight: 600;
+        }
+
+        .remove {
+            font-weight: 300;
+            font-size: 42px;
+            height: 44px;
+            line-height: 44px;
+            cursor: pointer;
+            color: #DA4453;
+            display: block;
+            float: right;
+        }
     </style>
 </head>
 <body>
     <div class="wrapper">
-    <form autocomplete="on">
         <section class="input-section">
             <span class="select-box">
                 <select id="input_weapon" name="weapon">
@@ -230,20 +273,81 @@
             </h3>
             <h2>Total Effective Power</h2>
             <h1 id="total_power">&mdash;</h1>
+            <br>
+            <button id="compare_weapon">Compare this weapon</button>
         </section>
 
-    </form>
+        <section class="compare-section">
+            <h2>Compare Weapons</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Label</th>
+                        <th>Weapon</th><!-- 
+                        <th>Attack</th>
+                        <th>Element</th>
+                        <th>Crit.</th>
+                        <th>Sharp.</th>
+                        <th>M.V.</th>
+                        <th>P. Effect.</th>
+                        <th>E. Effect.</th> -->
+                        <th>Total</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="compare_tbody">
+                </tbody>
+            </table>
+        </section>
+
     </div>
+
+    <script id="compare_row_template" style="display:none" type="text/html">
+        <tr>
+            <td><input type="text" class="table-text x-label" placeholder="label"></td>
+            <td class="x-weapon"></td><!-- 
+            <td class="x-weapon"></td>
+            <td class="x-weapon"></td>
+            <td class="x-weapon"></td>
+            <td class="x-weapon"></td>
+            <td class="x-weapon"></td>
+            <td class="x-weapon"></td>
+            <td class="x-weapon"></td> -->
+            <td class="x-total"></td>
+            <td><a class="x-remove remove">&times;</a></td>
+        </tr>
+    </script>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/zepto/1.1.4/zepto.min.js"></script>
     <script>
+        var $compareRowTemplate = $('#compare_row_template');
+
         var $sharpnesses = $('.sharpness span');
         $('.sharpness span').click(function(e) {
             $sharpnesses.removeClass('active');
             $(e.target).addClass('active');
         });
 
-        function calculateDamage() {
+        $('#compare_weapon').click(function(e) {
+            e.preventDefault();
+
+            var weapon = $('#input_weapon option[selected]').text();
+            var total = calculateDamage(false)[0].toFixed(2);
+            var $row = $($compareRowTemplate.html());
+
+            $row.find('.x-weapon').html(weapon);
+            $row.find('.x-total').html(total);
+            $row.find('.x-label').val(prompt('Weapon name/label'));
+            $row.on('click', '.x-remove', function() { $row.remove(); });
+
+            console.log($row);
+
+            $('#compare_tbody').append($row);
+
+            return;
+        });
+
+        function calculateDamage(updateDOM) {
             var weaponPower = $('#input_attack').val() / $('#input_weapon').val();
             var criticalRate = Number($('#input_critical').val());
             var nonCriticalRate = 100 - criticalRate;
@@ -266,15 +370,17 @@
             var totalElementPower = (effectiveElementPower * elementEffectiveness) * elementSharpness;
             var totalEffectivePower = totalPhysicalPower + totalElementPower;
 
-            if(typeof totalEffectivePower == 'number') {
-                $('#physical_power').html(totalPhysicalPower).toFixed(2));
-                $('#element_power').html(totalElementPower).toFixed(2));
+            if(typeof totalEffectivePower == 'number' && updateDOM) {
+                $('#physical_power').html(totalPhysicalPower.toFixed(2));
+                $('#element_power').html(totalElementPower.toFixed(2));
                 $('#total_power').html(totalEffectivePower.toFixed(2));
             }
+
+            return [ totalPhysicalPower, totalElementPower, totalEffectivePower ];
         }
 
         setInterval(function() {
-            calculateDamage();
+            calculateDamage(true);
         }, 10);
     </script>
 </body>
