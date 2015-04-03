@@ -11,3 +11,10 @@ True average effective power is the average amount of damage your weapon does pe
 ```effective element power = element power / 10```
 
 ```average effective power = effective physical power * sharpness + effective element power```
+
+## Additional Reading and Credits
+The formula and data comes from Gaijin Hunter and Kiranico.
+
+http://gaijinhunter.tumblr.com/post/92814625497/mh4-understanding-motion-values
+
+http://kiranico.com/en/mh4u
