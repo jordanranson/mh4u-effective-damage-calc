@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="description" content="">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            line-height: 1;
+            font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+            font-weight: 400;
+        }
+
+        h1, h2, h3, h4, h5, body, input, button, select {
+            font-size: 24px;
+            color: #656D78;
+        }
+
+        body {
+            background-color: #F0F2F5;
+            color: #656D78;
+        }
+
+        .wrapper {
+            padding: 100px 0;
+            margin: 0 auto;
+            width: 845px;
+        }
+
+        input, select, button {
+            border: none;
+            box-sizing: border-box;
+            vertical-align: top;
+            height: 60px;
+            line-height: 60px;
+            padding: 0 17px;
+            outline: none;
+            box-shadow: 0 2px 6px #CCD1D9;
+            -webkit-transition: 
+            color 150ms ease-in-out,
+            box-shadow 100ms ease-in-out;
+            transition: 
+            color 150ms ease-in-out,
+            box-shadow 100ms ease-in-out;
+        }
+
+        input:focus,
+        select:focus {
+            box-shadow: 0 0 0 4px #bf3e11;
+            color: #000;
+        }
+
+        .narrow-text {
+            width: 5em;
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        .sharpness {
+            display: inline-block;
+            vertical-align: top;
+            height: 60px;
+            line-height: 60px;
+            outline: none;
+            box-shadow: 0 2px 6px #CCD1D9;
+        }
+
+        .sharpness span {
+            position: relative;
+            display: block;
+            float: left;
+            width: 1.4em;
+            height: 60px;
+            cursor: pointer;
+        }
+
+        .sharpness span:after {
+            content: '';
+            position: absolute;
+            z-index: 1;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            box-shadow: 0 0 0 0 transparent;
+            -webkit-transition: box-shadow 100ms ease-in-out;
+            transition: box-shadow 100ms ease-in-out;
+        }
+
+        .sharpness span.active:after {
+            box-shadow: 0 0 0 4px #bf3e11;
+        }
+
+        .red { background-color: #DA4453; }
+        .orange { background-color: #FC6E51; }
+        .yellow { background-color: #FFCE54; }
+        .green { background-color: #A0D468; }
+        .blue { background-color: #5D9CEC; }
+        .white { background-color: #F5F7FA; }
+        .purple { background-color: #AC92EC; }
+
+        .input-section {
+            padding-bottom: 100px;
+        }
+
+        .output-section {
+
+        }
+
+
+        .output-section h2, .output-section h4 {
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding-bottom: 1em;
+        }
+
+        .output-section h1, .output-section h3 {
+            color: #000;
+        } 
+
+        .output-section h1 {
+            font-size: 150px;
+            letter-spacing: -2px;
+            font-weight: 300;
+        }
+
+        .output-section h3 {
+            font-size: 54px;
+            letter-spacing: -2px;
+            font-weight: 300;
+            padding-bottom: 1em;
+        }
+
+        .symbol {
+            padding: 0 9px;
+            vertical-align: top;
+            opacity: 0.7;
+            color: #656D78;
+        }
+
+        .percent-input {
+            position: relative;
+            display: inline-block;
+            letter-spacing: 0;
+            word-spacing: 0;
+            line-height: 0;
+            vertical-align: top;
+        }
+
+        .percent-input input {
+            padding-right: 2em;
+        }
+
+        .percent-input .symbol {
+            position: absolute;
+            display: block;
+            font-size: 24px;
+            width: 2em;
+            height: 60px;
+            line-height: 60px;
+            text-align: center;
+            right: 0;
+            top: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+    <form autocomplete="on">
+        <section class="input-section">
+            <span class="select-box">
+                <select id="input_weapon" name="weapon">
+                    <option value="4.8">Great Sword</option>
+                    <option value="3.3">Long Sword</option>
+                    <option value="1.4">Sword</option>
+                    <option value="1.4">Dual Blades</option>
+                    <option value="5.2" selected>Hammer</option>
+                    <option value="5.2">Hunting Horn</option>
+                    <option value="2.3">Lance</option>
+                    <option value="2.3">Gunlance</option>
+                    <option value="5.4">Switch Axe</option>
+                    <option value="3.6">Charge Blade</option>
+                    <option value="3.1">Insect Glaive</option>
+                    <option value="1.3">Light Bowgun</option>
+                    <option value="1.5">Heavy Bowgun</option>
+                    <option value="1.2">Bow</option>
+                </select>
+            </span>
+            <span><input type="text" class="narrow-text" placeholder="attack" id="input_attack" name="attack"></span>
+            <span><input type="text" class="narrow-text" placeholder="element" id="input_element" name="element"></span>
+            <span><input type="text" class="narrow-text" placeholder="critical" id="input_critical" name="critical"></span>
+            <span class="sharpness" id="input_sharpness">
+                <span class="red" data-value="0.5,0.25"></span>
+                <span class="orange" data-value="0.75,0.5"></span>
+                <span class="yellow active" data-value="1,0.75"></span>
+                <span class="green" data-value="1.05,1"></span>
+                <span class="blue" data-value="1.2,1.06"></span>
+                <span class="white" data-value="1.32,1.12"></span>
+                <span class="purple" data-value="1.45,1.2"></span>
+            </span>
+        </section>
+
+        <section class="output-section">
+            <h4>Physical Power</h4>
+            <h3>
+                <span class="label" id="physical_power">&mdash;</span>
+                <span class="symbol">&times;</span>
+                <span class="input">
+                    <input id="motion_value" type="text" class="narrow-text" placeholder="mv" name="motion_value">
+                </span>
+                <span class="symbol">&times;</span>
+                <span class="percent-input">
+                    <input id="physical_effectiveness" type="text" class="narrow-text" placeholder="effec.." value="100" name="physical_effectiveness">
+                    <span class="symbol">%</span>
+                </span>
+            </h3>
+            <h4>Element Power</h4>
+            <h3>
+                <span class="label" id="element_power">&mdash;</span>
+                <span class="symbol">&times;</span>
+                <span class="percent-input">
+                    <input id="element_effectiveness" type="text" class="narrow-text" placeholder="effec.." value="100" name="element_effectiveness">
+                    <span class="symbol">%</span>
+                </span>
+            </h3>
+            <h2>Total Effective Power</h2>
+            <h1 id="total_power">&mdash;</h1>
+        </section>
+
+    </form>
+    </div>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/zepto/1.1.4/zepto.min.js"></script>
+    <script>
+        var $sharpnesses = $('.sharpness span');
+        $('.sharpness span').click(function(e) {
+            $sharpnesses.removeClass('active');
+            $(e.target).addClass('active');
+        });
+
+        function calculateDamage() {
+            var weaponPower = $('#input_attack').val() / $('#input_weapon').val();
+            var criticalRate = Number($('#input_critical').val());
+            var nonCriticalRate = 100 - criticalRate;
+
+            var effectivePhysicalPower = ((weaponPower * 1.25) * criticalRate + (weaponPower * nonCriticalRate)) / 100;
+            var effectiveElementPower = $('#input_element').val() / 10;
+
+            var sharpness = $('#input_sharpness span.active').attr('data-value').split(',');
+            var physicalSharpness = Number(sharpness[0]);
+            var elementSharpness = Number(sharpness[1]);
+
+            var physicalEffectiveness = $('#physical_effectiveness').val() / 100;
+            var elementEffectiveness = $('#element_effectiveness').val() / 100;
+
+            var truePhysicalPower = effectivePhysicalPower * physicalSharpness;
+            var trueElementPower = effectiveElementPower * elementSharpness;
+
+            var totalEffectivePower = 0;
+            var motionValue = $('#motion_value').val();
+            if(motionValue === '') 
+                totalEffectivePower = (truePhysicalPower * physicalEffectiveness) + (trueElementPower * elementEffectiveness);
+            else {
+                motionValue = Number(motionValue) / 100;
+                totalEffectivePower = (truePhysicalPower * motionValue * physicalEffectiveness) + (trueElementPower * motionValue * elementEffectiveness);
+            }
+
+
+            if(typeof totalEffectivePower == 'number') {
+                $('#physical_power').html((truePhysicalPower * physicalEffectiveness).toFixed(2));
+                $('#element_power').html((trueElementPower * elementEffectiveness).toFixed(2));
+                $('#total_power').html(totalEffectivePower.toFixed(2));
+            }
+        }
+
+        setInterval(function() {
+            calculateDamage();
+        }, 10);
+    </script>
+</body>
+</html>
