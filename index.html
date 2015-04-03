@@ -258,22 +258,17 @@
             var physicalEffectiveness = $('#physical_effectiveness').val() / 100;
             var elementEffectiveness = $('#element_effectiveness').val() / 100;
 
-            var truePhysicalPower = effectivePhysicalPower * physicalSharpness;
-            var trueElementPower = effectiveElementPower * elementSharpness;
-
-            var totalEffectivePower = 0;
             var motionValue = $('#motion_value').val();
-            if(motionValue === '') 
-                totalEffectivePower = (truePhysicalPower * physicalEffectiveness) + (trueElementPower * elementEffectiveness);
-            else {
-                motionValue = Number(motionValue) / 100;
-                totalEffectivePower = (truePhysicalPower * motionValue * physicalEffectiveness) + (trueElementPower * motionValue * elementEffectiveness);
-            }
+            if(motionValue === '') motionValue = 1;
+            else motionValue = Number(motionValue) / 100;
 
+            var totalPhysicalPower = (effectivePhysicalPower * motionValue * physicalEffectiveness) * physicalSharpness;
+            var totalElementPower = (effectiveElementPower * elementEffectiveness) * elementSharpness;
+            var totalEffectivePower = totalPhysicalPower + totalElementPower;
 
             if(typeof totalEffectivePower == 'number') {
-                $('#physical_power').html((truePhysicalPower * physicalEffectiveness).toFixed(2));
-                $('#element_power').html((trueElementPower * elementEffectiveness).toFixed(2));
+                $('#physical_power').html(totalPhysicalPower).toFixed(2));
+                $('#element_power').html(totalElementPower).toFixed(2));
                 $('#total_power').html(totalEffectivePower.toFixed(2));
             }
         }
